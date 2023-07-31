@@ -25,9 +25,9 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
     @GetMapping
-    public List<Customer> customers (){
+    public ResponseEntity<List<Customer>> customers (){
         List<Customer> customers = customerService.customerList();
-        return customers;
+        return ResponseEntity.status(405).body(customers);
     }
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     public Customer getCustomer(@PathVariable Integer id){
@@ -35,9 +35,9 @@ public class CustomerController {
         return customerById;
     }
     @PostMapping
-    public ApiResponse addCustomer(@Valid @RequestBody CustomerDTO customerDTO){
+    public ResponseEntity<ApiResponse> addCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         ApiResponse apiResponse = customerService.saveCustomer(customerDTO);
-        return apiResponse;
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
@@ -61,6 +61,7 @@ public class CustomerController {
         errorResponse.put("errors", errors);
         return errorResponse;
     }
+
 
 }
 
